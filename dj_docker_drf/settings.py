@@ -11,6 +11,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -56,6 +57,7 @@ MIDDLEWARE = [
 ]
 
 
+
 ROOT_URLCONF = 'dj_docker_drf.urls'
 
 TEMPLATES = [
@@ -81,15 +83,26 @@ ALLOWED_HOSTS = ['*']
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#         'default': {
+#             'ENGINE': 'djongo',
+#             'NAME': 'EdumastersPyBase',
+#             'ENFORCE_SCHEMA': False,
+#             'CLIENT': {
+#                 'host': ''
+#             }  
+#         }
+# }
+
 DATABASES = {
-        'default': {
-            'ENGINE': 'djongo',
-            'NAME': 'EdumastersPyBase',
-            'ENFORCE_SCHEMA': False,
-            'CLIENT': {
-                'host': 'mongodb+srv://admin:admin@edumastercluster.5888v.mongodb.net/EdumastersPyBase?retryWrites=true&w=majority'
+    'default': {
+        'ENGINE': 'djongo',
+        'NAME': 'EdumastersPyBase',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+                'host':'mongodb+srv://admin:admin@edumastercluster.5888v.mongodb.net/admin?retryWrites=true&w=majority'
             }  
-        }
+    }
 }
 
 # Password validation
@@ -135,9 +148,12 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
-EMAIL_HOST_PASSWORD = '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'
-EMAIL_PORT = 587
+EMAIL_HOST = 'smptpro.zoho.eu'
+EMAIL_HOST_USER = 'thisistextaccforme@gmail.com' # this is exactly the value 'apikey'
+# EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_PASSWORD = 'aaaAA11!'
+EMAIL_PORT = 465
+# EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True

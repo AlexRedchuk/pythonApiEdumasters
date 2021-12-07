@@ -5,8 +5,12 @@ from django.http.response import JsonResponse
 
 from EmailApp.models import EmailInfo
 from EmailApp.serializers import EmailInfoSerializer 
-from django.core.mail import send_mail
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from smtplib import SMTP_SSL
+from email.mime.text import MIMEText
+from ssl import create_default_context
 
 from django.core.files.storage import default_storage
 
@@ -21,16 +25,23 @@ def emailInfoApi(request,id=0):
     elif request.method=='POST':
         emailinfo_data=JSONParser().parse(request)
         emailinfo_serializer=EmailInfoSerializer(data=emailinfo_data)
-        if emailinfo_serializer.is_valid():
-            send_mail(
-                'Subject here',
-                'Here is the message.',
-                'edumasters.team@gmail.com',
-                ['sanya.redchuk@gmail.com'],
-                fail_silently=False,
-            )
+    if emailinfo_serializer.is_valid():
+        try:
             emailinfo_serializer.save()
+            recipient = emailinfo_serializer.validated_data['EmailInfoUserEmail']
+            message = MIMEMultipart("alternative")
+            message["Subject"] = "Edumastery"
+            message["From"] = "edumasters.team@gmail.com"
+            message["To"] = recipient
+            message.attach(MIMEText("Thank you for subscribing to our news", "plain"))
+            context = create_default_context()
+            with SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+                server.login("edumasters.team@gmail.com", "edumaster@123")
+                server.sendmail("edumasters.team@gmail.com", recipient, message.as_string())
             return JsonResponse("Added Successfully",safe=False)
+        except Exception as e:
+            print(e)
+           
         return JsonResponse("Failed to Add",safe=False)
     elif request.method=='PUT':
         emailinfo_data=JSONParser().parse(request)
